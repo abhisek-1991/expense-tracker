@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="downloadrep.css" />
+    <style></style>
+  </head>
+  <body>
+    <center>
+      <div class="input-submit">
+        <button class="submit-btn" id="submit"></button>
+        <label for="submit">Go-Back</label>
+      </div>
+      <div class="login-header">
+        <header>Day to day Expenses</header>
+      </div>
+
+      <table class="styled-table" id="styled-table">
+        <thead>
+          <tr>
+            <th>Sl.no</th>
+            <th>File name</th>
+            <th>Created at</th>
+            <th>Download</th>
+          </tr>
+        </thead>
+        <tbody class="boxx" id="boxx">
+          <!-- <tr>
+            <td>Dom</td>
+            <td>6000</td>
+            <td>6000</td>
+            <td>6000</td>
+          </tr>
+          <tr class="active-row">
+            <td>Melissa</td>
+            <td>5150</td>
+            <td>6000</td>
+            <td>6000</td>
+          </tr> -->
+        </tbody>
+      </table>
+    </center>
+  </body>
+  <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+  <script>
+    document.querySelector(".input-submit").addEventListener("click", moveback);
+    var url = "";
+    window.addEventListener("DOMContentLoaded", () => {
+      pageloader();
+    });
+    async function pageloader() {
+      const token = localStorage.getItem("token");
+      const data = await axios.get("http://3.89.27.24/premium/downgenerep", {
+        headers: { Authorization: token },
+      });
+      console.log(data.data);
+      var count = 0;
+      data.data.search.forEach((element) => {
+        count++;
+        const box = document.getElementById("boxx");
+        const tr = document.createElement("tr");
+        const td1 = document.createElement("td");
+        const td2 = document.createElement("td");
+        const td3 = document.createElement("td");
+        if (count % 2 == 0) {
+          tr.className = "active-row";
+        }
+        td1.innerHTML = count;
+        td2.innerHTML = element.filename;
+        td3.innerHTML = element.createdAt;
+        var delbtn = document.createElement("input");
+        var idstore = document.createElement("input");
+        delbtn.type = "button";
+        delbtn.value = "Download";
+        delbtn.className = "delete-btn";
+        idstore.value = element.url;
+        idstore.type = "hidden";
+        box.appendChild(tr);
+        tr.appendChild(idstore);
+        tr.appendChild(td1);
+        tr.appendChild(td2);
+        tr.appendChild(td3);
+        tr.appendChild(delbtn);
+        delbtn.addEventListener("click", downf);
+      });
+    }
+    function moveback() {
+      window.location.href = "./expenses.html";
+    }
+    function downf(e) {
+      var par = e.target.parentElement;
+      var fc = par.firstChild;
+      var id = fc.value;
+      window.location.href = id;
+    }
+  </script>
+</html>

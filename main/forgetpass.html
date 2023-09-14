@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SignIn</title>
+    <link rel="stylesheet" href="signup.css">
+</head>
+
+<body>
+    <form id="form">
+        <div class="login-box">
+            <div class="login-header">
+                <header>Forget Password</header>
+            </div>
+            <div class="input-box">
+                <input type="text" class="input-field" placeholder="Email" autocomplete="off" required id="emai">
+            </div>
+            <div class="forgot">              
+                <section>
+                    Already have a account-<a href="./sign_in.html">Sign In</a>
+                </section>
+            </div>
+            <header id="wrongpasswor"></header>
+            <div class="input-submit">
+                <button class="submit-btn" id="submit"></button>
+                <label for="submit">Send email</label>
+            </div>
+    </form>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    document.getElementById('form').addEventListener('submit', forgetpass)
+    var email = document.getElementById('emai')
+    var wrongpassword = document.getElementById('wrongpasswor')
+
+    async function forgetpass(e) {
+        e.preventDefault()
+        try {
+            const data = await axios.post('http://3.89.27.24/password/forgotpassword/' + email.value);
+            wrongpassword.innerHTML = "Email sent successfully"
+            wrongpassword.style.color = 'green'
+        } catch (err) {
+            if (err.response.status == 404) {
+                wrongpassword.innerHTML = "Email not found"
+                wrongpassword.style.color = 'red'
+            } else if (err.response.status == 500) {
+                wrongpassword.innerHTML = "Something went wrong"
+                wrongpassword.style.color = 'red'
+            }
+        }
+    }    
+</script>
+
+</html>

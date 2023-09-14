@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="downloadrep.css">
+    <style>
+    </style>
+</head>
+
+<body>
+    <center>
+
+    <div class="input-submit">
+        <button class="submit-btn" id="submit"></button>
+        <label for="submit">Go-Back</label>
+    </div>
+    <div class="login-header">
+        <header>Day to day Expenses</header>
+    </div>
+
+        <table class="styled-table" id="styled-table">
+            <thead>
+                <tr>
+                    <th>Sl.no</th>
+                    <th>Amount</th>
+                    <th>Description</th>
+                    <th>Category</th>
+                    <th>Created at</th>
+                </tr>
+            </thead>
+            <tbody class="boxx" id="boxx">
+                <!-- <tr>
+            <td>Dom</td>
+            <td>6000</td>
+            <td>6000</td>
+            <td>6000</td>
+          </tr>
+          <tr class="active-row">
+            <td>Melissa</td>
+            <td>5150</td>
+            <td>6000</td>
+            <td>6000</td>
+          </tr> -->
+            </tbody>
+        </table>
+    </center>
+    <div class="down">
+        <img id="downrep" src="Eo_circle_green_arrow-down.svg.png" alt="">
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+<script>
+    document.querySelector('.input-submit').addEventListener('click',moveback)
+    var url = ""
+    document.querySelector('#downrep').addEventListener('click', downloadrep)
+    window.addEventListener('DOMContentLoaded', () => {
+        pageloader();
+    })
+    async function pageloader() {
+        const box = document.getElementById('boxx')
+        const token = localStorage.getItem('token');
+        const data = await axios.get('http://3.89.27.24/premium/downrep', { headers: { "Authorization": token } })
+        console.log(data.data)
+        url = data.data.fileURl;
+        var count = 0;
+        data.data.exp.forEach(element => {
+            count++
+            const box = document.getElementById('boxx')
+            console.log(element.id)
+            const tr = document.createElement('tr');
+            const td1 = document.createElement('td');
+            const td2 = document.createElement('td');
+            const td3 = document.createElement('td');
+            const td4 = document.createElement('td');
+            const td5 = document.createElement('td');
+            if (count % 2 == 0) {
+                tr.className = "active-row"
+            }
+            td1.innerHTML = count;
+            td2.innerHTML = element.expenseamount;
+            td3.innerHTML = element.description;
+            td4.innerHTML = element.category;
+            td5.innerHTML = element.createdAt;
+            box.appendChild(tr);
+            tr.appendChild(td1)
+            tr.appendChild(td2)
+            tr.appendChild(td3)
+            tr.appendChild(td4)
+            tr.appendChild(td5)
+        });
+    }
+    function downloadrep() {
+        window.location.href = url;
+    }
+    function moveback(){
+        window.location.href = "./expenses.html";
+
+    }
+</script>
+
+</html>
