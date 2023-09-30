@@ -8,11 +8,12 @@ function login(e) {
 
     }
     console.log(loginDetails)
-    axios.post('http://localhost:3000/user/login',loginDetails).then(response => {
+    axios.post('http://localhost:4000/login',loginDetails).then(response => {
             alert(response.data.message)
             console.log(response.data)
-            localStorage.setItem('token', response.data.token)
-            window.location.href = "../ExpenseTracker/index.html"
+            window.location.href = "./expense.html"
+            //localStorage.setItem('token', response.data.token)
+            //window.location.href = "../ExpenseTracker/index.html"
     }).catch(err => {
         console.log(JSON.stringify(err))
         document.body.innerHTML += `<div style="color:red;">${err.message} <div>`;

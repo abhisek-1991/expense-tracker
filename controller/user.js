@@ -32,30 +32,36 @@ const signup = async (req, res) => {
   }
 };
 
-async function login(req,res){
+async function login(req, res) {
   try {
     const { email, password } = req.body;
 
-    if (!name || !email || !password) {
-      return res.status(400).json({ err: "Bad parameters - Something is missing" });
-    }
-    
-  
-    const newUser = await User.findOne({where:{email:email}});
-    if(newUser){
-      if(newUser.password==password){
-        res.status(200).json({ message: 'Successfully logged In' });
-      } else{
-        res.status(401).json({message: 'wrong password'});
-
-      } 
-    } else{
-      res.status(404).json({message: 'User not found'});
+    if (!email || !password) {
+      return res.status(400).json({ err: 'Bad parameters - Something is missing' });
     }
 
+    const user = await User.findOne({ where: { email: email } });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    bcrypt.compare(password, user.password, (err, result) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ error: 'Internal server error' });
+      }
+
+      if (result) {
+        res.status(200).json({ message: 'Successfully logged in' });
+      } else {
+        res.status(401).json({ message: 'Wrong password' });
+      }
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Internal server error' });
   }
 }
+
 module.exports = {signup,login};

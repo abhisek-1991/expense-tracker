@@ -1,16 +1,16 @@
 const express = require('express');
-
 const userController = require('../controller/user');
-//const expenseController = require('../controller/expense');
-
-//const authenticatemiddleware = require('../middleware/auth');
-
 const router = express.Router();
+const path = require('path');
 
-router.post('/signup', userController.signup);
+// Define routes for signup and login
+router.post('/user', userController.signup);
+router.post('/login', userController.login);
+router.get('/login', (req,res)=>{
+    res.sendFile(path.join(__dirname, '../main/login.html'));
+});
+router.get('/user', (req, res) => {
+    res.sendFile(path.join(__dirname, '../main/signup.html'));
+});
 
-router.post('/login',userController.login);
-
-//router.post('/addexpense' ,authenticatemiddleware.authenticate, expenseController);
-
-module.exports= router;
+module.exports = router;

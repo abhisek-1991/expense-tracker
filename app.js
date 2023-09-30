@@ -1,16 +1,21 @@
-require('dotenv').config()
-const express = require('express');
-const cors = require('cors');
-const sequelize = require('./util/database');
 const path = require('path');
-const userRoute = require('./routes/user');
+const bodyParser = require('body-parser');
+const express = require('express');
 const app = express();
-app.use(express.json());
-app.use(cors());
-app.use(express.static(path.join(__dirname,"public")));
-app.use('/user',userRoute);
-app.use((req,res)=>{
-    res.sendFile(path.join(__dirname,"main/"+req.url))
-})
-sequelize.sync().then((res)=>{app.listen(process.env.PORT)}).catch((err)=>{console.log(err)});
+const sequelize = require('./util/database');
+const User = require('./models/users');
+const expense = require('./models/expenses');
+const expenseRoutes = require('./routes/expense');
+const userRoutes = require('./routes/user');
+//app.use(express.static(path.join(__dirname, 'main','signup')));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, 'main')));
 
+app.use('/',userRoutes);
+app.use('/',expenseRoutes);
+
+
+app.listen(4000,()=>{
+    console.log('server is running');
+});
