@@ -14,6 +14,32 @@ const addExpense = (req, res) => {
     })
 }
 
+const getAllExpenses = (req, res) => {
+    Expense.findAll()
+        .then(expenses => {
+            return res.status(200).json({ expenses, success: true });
+            //console.log(expenses);
+        })
+        .catch(err => {
+            return res.status(500).json({ success: false, error: err });
+        });
+};
 
-module.exports = {addExpense};
+
+const deleteExpense = (req, res) => {
+    const expenseId = req.params.id;
+  
+    Expense.destroy({ where: { id: expenseId } })
+      .then(() => {
+        res.status(204).end(); // Respond with a 204 status code (No Content) to indicate success
+      })
+      .catch((error) => {
+        res.status(500).json({ error: 'An error occurred while deleting the expense' });
+      });
+  };
+
+
+
+
+module.exports = {addExpense,getAllExpenses,deleteExpense};
     
