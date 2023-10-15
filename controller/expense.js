@@ -15,7 +15,7 @@ const addExpense = (req, res) => {
 }
 
 const getAllExpenses = (req, res) => {
-    Expense.findAll()
+    Expense.findAll({where : {userId: req.user.id}})
         .then(expenses => {
             return res.status(200).json({ expenses, success: true });
             //console.log(expenses);

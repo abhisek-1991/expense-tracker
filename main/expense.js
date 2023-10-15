@@ -69,7 +69,8 @@ function addExpense(event) {
 
 window.addEventListener('DOMContentLoaded', () => {
   // Fetch expenses from the server
-  axios.get('http://localhost:4000/expense')
+  const token = localStorage.getItem('token');
+  axios.get('http://localhost:4000/expense',{headers:{"Authorization":token}})
     .then((response) => {
       response.data.expenses.forEach((expense) => {
         addExpenseToList(expense);

@@ -15,6 +15,8 @@ app.use(express.static(path.join(__dirname, 'main')));
 app.use('/',userRoutes);
 app.use('/',expenseRoutes);
 
+User.hasMany(expense);
+expense.belongsTo(User);
 
 app.listen(4000,()=>{
     console.log('server is running');
