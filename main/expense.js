@@ -47,10 +47,10 @@ function addExpense(event) {
     description,
     category,
   };
-
+  const token=localStorage.getItem('token');
   // Make a POST request to localhost:4000 to add the expense
   axios
-    .post('http://localhost:4000/expense', expense)
+    .post('http://localhost:4000/expense', expense,{headers:{"Authorization":token}})
     .then((response) => {
       // Handle the response if needed
       console.log('Expense added:', response.data);
@@ -85,8 +85,9 @@ window.addEventListener('DOMContentLoaded', () => {
 form.addEventListener('submit', addExpense);
 
 function deleteExpense(expense) {
+  const token=localStorage.getItem('token');
   axios
-    .delete(`http://localhost:4000/expense/${expense.id}`)
+    .delete(`http://localhost:4000/expense/${expense.id}`,{headers:{"Authorization":token}})
     .then(() => {
       // Remove the expense from the list in the UI
       // You might need to find the specific list item and remove it here

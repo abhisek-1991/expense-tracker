@@ -47,6 +47,7 @@ async function login(req, res) {
     }
 
     const user = await User.findOne({ where: { email: email } });
+    console.log(user);
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
@@ -57,9 +58,10 @@ async function login(req, res) {
         console.error(err);
         return res.status(500).json({ error: 'Internal server error' });
       }
-
+      const userId = user.dataValues.id;
+      //console.log(userId);
       if (result) {
-        res.status(200).json({ message: 'Successfully logged in' ,token: generateAccessToken(user.id)});
+        res.status(200).json({ message: 'Successfully logged in' ,token: generateAccessToken(userId)});
       } else {
         res.status(401).json({ message: 'Wrong password' });
       }

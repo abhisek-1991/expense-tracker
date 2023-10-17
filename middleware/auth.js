@@ -5,10 +5,11 @@ const auth=(req,res,next)=>{
     
     try{
         const token=req.header('Authorization');
-        console.log(token);
+        //console.log(token);
         const userid = jwt.verify(token,'2FZqU9LD69XtZJG9xdbiVwKo9SPxKZxY');
-        User.findByPk(user.userId).then(user=> {
-            console.log(JSON.stringify(user));
+        console.log("jwt_verification",userid);
+        User.findByPk(userid.userId).then(user=> {
+            //console.log(JSON.stringify(user));
             req.user=user;
             next();
         }).catch(err=> {throw new Error(err)})

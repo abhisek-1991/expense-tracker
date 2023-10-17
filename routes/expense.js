@@ -5,9 +5,9 @@ const userauthentication = require('../middleware/auth');
 //const path = require('path');
 
 
-router.post('/expense', expenseController.addExpense);
+router.post('/expense',userauthentication.auth, expenseController.addExpense);
 router.get('/expense',userauthentication.auth,expenseController.getAllExpenses);
-router.delete('/expense/:id', expenseController.deleteExpense);
+router.delete('/expense/:id', userauthentication.auth,expenseController.deleteExpense);
 
 
 

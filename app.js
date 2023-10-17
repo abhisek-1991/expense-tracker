@@ -18,6 +18,12 @@ app.use('/',expenseRoutes);
 User.hasMany(expense);
 expense.belongsTo(User);
 
-app.listen(4000,()=>{
-    console.log('server is running');
-});
+sequelize.sync()
+    .then(() => {
+    // The database tables are dropped and recreated
+    console.log('Database synchronized');
+    app.listen(4000);
+    })
+    .catch(err=>{
+        console.log(err);
+    });
