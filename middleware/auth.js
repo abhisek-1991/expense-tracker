@@ -1,12 +1,13 @@
 const jwt=require('jsonwebtoken');
 const User=require('../models/users');
 
+
 const auth=(req,res,next)=>{
     
     try{
         const token=req.header('Authorization');
         //console.log(token);
-        const userid = jwt.verify(token,'2FZqU9LD69XtZJG9xdbiVwKo9SPxKZxY');
+        const userid = jwt.verify(token,process.env.secret_key);
         console.log("jwt_verification",userid);
         User.findByPk(userid.userId).then(user=> {
             //console.log(JSON.stringify(user));

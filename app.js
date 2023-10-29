@@ -1,10 +1,13 @@
+require('dotenv').config();
 const path = require('path');
 const bodyParser = require('body-parser');
 const express = require('express');
 const app = express();
 const sequelize = require('./util/database');
+const purchaseRoutes = require('./routes/purchase');
 const User = require('./models/users');
 const expense = require('./models/expenses');
+const order = require('./models/orders');
 const expenseRoutes = require('./routes/expense');
 const userRoutes = require('./routes/user');
 //app.use(express.static(path.join(__dirname, 'main','signup')));
@@ -14,9 +17,13 @@ app.use(express.static(path.join(__dirname, 'main')));
 
 app.use('/',userRoutes);
 app.use('/',expenseRoutes);
+app.use('/',purchaseRoutes);
 
 User.hasMany(expense);
 expense.belongsTo(User);
+
+User.hasMany(order);
+order.belongsTo(User);
 
 sequelize.sync()
     .then(() => {

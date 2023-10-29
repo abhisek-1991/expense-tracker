@@ -97,3 +97,75 @@ function deleteExpense(expense) {
       showError(error);
     });
 }
+
+
+document.getElementById('rzp-button1').addEventListener('click', toRazorPay);
+const token=localStorage.getItem('token');
+function toRazorPay(e) {
+  e.preventDefault();
+  axios.get(`http://localhost:4000/buypremium`, {
+      headers: {
+          Authorization: token
+      }
+  }).then(res => {
+      console.log(res);
+      if (res.status === 201) {
+          let options = {
+              //order detail we get from backend so noone manuplate them directly
+              "key": res.data.data.key_id,
+              "order_id": res.data.data.order.id,
+              //this will handel the response after the payment(update the order table)
+              "handler": (result) => {
+                  console.log(result);
+                  axios.post(`http://localhost:4000/update_transaction`, {
+                      order_id: options.order_id,
+                      payment_id: result.razorpay_payment_id
+                  }, {
+                      headers: {
+                          Authorization: token
+                      }
+                  }).then(() => {
+                      alert("you are a premium user now")
+                      document.getElementById("Premium").removeAttribute("hidden");
+                      buyPremium.setAttribute("hidden", "");
+                      document.getElementById("openleaderboard").removeAttribute("hidden");
+                      document.getElementById("gotoIncomeNExpense").removeAttribute("hidden");
+                  }).catch(err => {
+                      console.log(err);
+                      alert(err.response.data.message);
+                  });
+              }
+          }
+          //create new object of razor pay
+          const payrazor = new window.Razorpay(options);
+          //open modal of razorpay
+          payrazor.open();
+          //call a modal to hide default behavior
+          e.preventDefault();
+          //if payment 
+          payrazor.on('payment.failed', (response) => {
+              // console.log(response);
+              console.log(response);
+              axios.post(`http://localhost:4000/failed_transaction`, {
+                  order_id: response.error.metadata.order_id,
+                  payment_id: response.error.metadata.payment_id
+              }, {
+                  headers: {
+                      Authorization: token
+                  }
+              }).then(() => {
+                  alert("TRANSACTION FAILED.")
+              }).catch(err => {
+                  console.log(err);
+                  alert(err.response.data.message);
+              });
+          })
+      }
+  }).catch(err => {
+      console.log(err);
+      if (err.response && (err.response.status === 404 || err.response.status === 500)) {
+          alert(err.response.data.message);
+      }
+  });
+}
+
