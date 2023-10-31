@@ -53,7 +53,7 @@ function addExpense(event) {
     .post('http://localhost:4000/expense', expense,{headers:{"Authorization":token}})
     .then((response) => {
       // Handle the response if needed
-      console.log('Expense added:', response.data);
+      //console.log('Expense added:', response.data);
       addExpenseToList(expense);
     })
     .catch((error) => {
@@ -91,7 +91,7 @@ function deleteExpense(expense) {
     .then(() => {
       // Remove the expense from the list in the UI
       // You might need to find the specific list item and remove it here
-      console.log('Expense deleted successfully');
+      //console.log('Expense deleted successfully');
     })
     .catch((error) => {
       showError(error);
@@ -108,7 +108,7 @@ function toRazorPay(e) {
           Authorization: token
       }
   }).then(res => {
-      console.log(res);
+      console.log('response of expense.js 111===>',res);
       if (res.status === 201) {
           let options = {
               //order detail we get from backend so noone manuplate them directly
@@ -116,7 +116,7 @@ function toRazorPay(e) {
               "order_id": res.data.data.order.id,
               //this will handel the response after the payment(update the order table)
               "handler": (result) => {
-                  console.log(result);
+                  console.log('response of expense.js 119==>',result);
                   axios.post(`http://localhost:4000/update_transaction`, {
                       order_id: options.order_id,
                       payment_id: result.razorpay_payment_id
@@ -145,7 +145,7 @@ function toRazorPay(e) {
           //if payment 
           payrazor.on('payment.failed', (response) => {
               // console.log(response);
-              console.log(response);
+              console.log('response of expense.js,line 148',response);
               axios.post(`http://localhost:4000/failed_transaction`, {
                   order_id: response.error.metadata.order_id,
                   payment_id: response.error.metadata.payment_id
@@ -163,9 +163,7 @@ function toRazorPay(e) {
       }
   }).catch(err => {
       console.log(err);
-      if (err.response && (err.response.status === 404 || err.response.status === 500)) {
-          alert(err.response.data.message);
-      }
+      
   });
 }
 

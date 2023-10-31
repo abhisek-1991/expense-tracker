@@ -40,6 +40,7 @@ const generateAccessToken = (id) => {
 
 async function login(req, res) {
   try {
+    console.log('output of login function line 43===>', req.body);
     const { email, password } = req.body;
 
     if (!email || !password) {
@@ -47,7 +48,7 @@ async function login(req, res) {
     }
 
     const user = await User.findOne({ where: { email: email } });
-    console.log(user);
+    console.log(user.body);
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });

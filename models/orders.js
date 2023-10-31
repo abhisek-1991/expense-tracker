@@ -24,6 +24,7 @@ const Order= sequelize.define('orders',{
         type:Sequelize.INTEGER
     }
 
+    
 })
 
 module.exports= Order;
