@@ -12,5 +12,5 @@ router.get('/login', (req,res)=>{
 router.get('/user', (req, res) => {
     res.sendFile(path.join(__dirname, '../main/signup.html'));
 });
-
+//router.get('/user/premium',userController.check_premium);
 module.exports = router;

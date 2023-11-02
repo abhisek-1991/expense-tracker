@@ -67,11 +67,33 @@ function addExpense(event) {
   categoryInput.value = '';
 }
 
+function parseJwt (token) {
+  var base64Url = token.split('.')[1];
+  var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+  }).join(''));
+
+  return JSON.parse(jsonPayload);
+}
+
+function showPremium_user_message(){
+  document.getElementById('rzp-button1').style.visibility = 'hidden';
+  document.getElementById('message').innerHTML='You are a premium user';
+}
+
 window.addEventListener('DOMContentLoaded', () => {
   // Fetch expenses from the server
   const token = localStorage.getItem('token');
+  const decodeToken = parseJwt(token);
+  console.log(decodeToken);
+  const isPremium = decodeToken.isPremium;
+  if(isPremium){
+    showPremium_user_message();
+  }
   axios.get('http://localhost:4000/expense',{headers:{"Authorization":token}})
     .then((response) => {
+      console.log('output of expense.js line 75=======>',response);
       response.data.expenses.forEach((expense) => {
         addExpenseToList(expense);
       });
@@ -79,6 +101,8 @@ window.addEventListener('DOMContentLoaded', () => {
     .catch((error) => {
       showError(error);
     });
+
+  
 });
 
 // Add a form submit event listener
@@ -119,7 +143,7 @@ function toRazorPay(e) {
                   console.log('response of expense.js 119==>',result);
                   axios.post(`http://localhost:4000/update_transaction`, {
                       order_id: options.order_id,
-                      payment_id: result.razorpay_payment_id
+                      payment_id: result.razorpay_payment_id      
                   }, {
                       headers: {
                           Authorization: token

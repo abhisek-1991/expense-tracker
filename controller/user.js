@@ -33,8 +33,8 @@ const signup = async (req, res) => {
   }
 };
 
-const generateAccessToken = (id) => {
-  return jwt.sign({ userId: id } ,process.env.secret_key);
+const generateAccessToken = (id,prem) => {
+  return jwt.sign({ userId: id ,isPremium:prem} ,process.env.secret_key);
 }
 
 
@@ -60,9 +60,10 @@ async function login(req, res) {
         return res.status(500).json({ error: 'Internal server error' });
       }
       const userId = user.dataValues.id;
-      //console.log(userId);
+      const prem = user.dataValues.isPremium;
+      console.log("contents of userId==========>>>>",user.dataValues.isPremium);
       if (result) {
-        res.status(200).json({ message: 'Successfully logged in' ,token: generateAccessToken(userId)});
+        res.status(200).json({ message: 'Successfully logged in' ,token: generateAccessToken(userId,prem)});
       } else {
         res.status(401).json({ message: 'Wrong password' });
       }
@@ -72,5 +73,7 @@ async function login(req, res) {
     res.status(500).json({ error: 'Internal server error' });
   }
 }
+
+
 
 module.exports = {signup,login};
