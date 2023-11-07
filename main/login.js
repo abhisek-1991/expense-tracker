@@ -1,16 +1,16 @@
 function login(e) {
     e.preventDefault();
-    console.log(e.target.name);
+    //console.log(e.target.name);
 
     const loginDetails = {
         email: e.target.email.value,
         password: e.target.password.value
 
     }
-    console.log(loginDetails)
+    //console.log(loginDetails)
     axios.post('http://localhost:4000/login',loginDetails).then(response => {
-            console.log(response.data.message)
-            //console.log(response.data)
+            //console.log(response.data.message)
+            console.log("login_response========",response.data)
             window.location.href = "./expense.html"
             localStorage.setItem('token', response.data.token)
             //console.log(response);

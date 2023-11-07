@@ -13,7 +13,7 @@ async function toRazorPay(e) {
           key: response.data.data.key_id,
           order_id: response.data.data.order.id,
           handler: async (result) => {
-            console.log(result);
+            //console.log(result);
             try {
               await axios.post("http://localhost:4000/update_transaction", {
                 order_id: options.order_id,
@@ -44,7 +44,7 @@ async function toRazorPay(e) {
   
         // Handle payment failure
         payrazor.on("payment.failed", async (response) => {
-          console.log(response);
+          //console.log(response);
           try {
             await axios.post("http://localhost:4000/failed_transaction", {
               order_id: response.error.metadata.order_id,

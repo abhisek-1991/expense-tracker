@@ -82,18 +82,40 @@ function showPremium_user_message(){
   document.getElementById('message').innerHTML='You are a premium user';
 }
 
+function showLeaderBoard(){
+  const inputElement = document.createElement("input");     // maybe we will face problem because in the html there is no place for creating
+  inputElement.type = "button";                             // the input element
+  inputElement.value= "Show Leaderboard";
+  inputElement.onclick=async()=>{
+    const token = localStorage.getItem("token");
+    const userLeaderBoardArray = await axios.get('http://localhost:4000/premium/showLeaderBoard',{headers:{"Authorization":token}})
+    
+    var leaderboardElem = document.getElementById('leaderboard');
+    leaderboardElem.innerHTML += '<h1> Leader Board </<h1>';
+    userLeaderBoardArray.data.forEach((userDeatails)=>{
+      leaderboardElem.innerHTML += `<li>Name - ${userDeatails.name} Total Expensw -${userDeatails.expense}`
+    })
+
+  }
+  document.getElementById("message").appendChild(inputElement);
+
+}
+
+
+
 window.addEventListener('DOMContentLoaded', () => {
   // Fetch expenses from the server
   const token = localStorage.getItem('token');
   const decodeToken = parseJwt(token);
-  console.log(decodeToken);
+  //console.log(decodeToken);
   const isPremium = decodeToken.isPremium;
   if(isPremium){
     showPremium_user_message();
+    showLeaderBoard();
   }
   axios.get('http://localhost:4000/expense',{headers:{"Authorization":token}})
     .then((response) => {
-      console.log('output of expense.js line 75=======>',response);
+      //console.log('output of expense.js line 75=======>',response);
       response.data.expenses.forEach((expense) => {
         addExpenseToList(expense);
       });
@@ -132,15 +154,16 @@ function toRazorPay(e) {
           Authorization: token
       }
   }).then(res => {
-      console.log('response of expense.js 111===>',res);
+      //console.log('response of expense.js 111===>',res);
       if (res.status === 201) {
-          let options = {
+        console.log("response of buypremium , expense.js line 159",res.data);  
+        let options = {
               //order detail we get from backend so noone manuplate them directly
               "key": res.data.data.key_id,
               "order_id": res.data.data.order.id,
               //this will handel the response after the payment(update the order table)
               "handler": (result) => {
-                  console.log('response of expense.js 119==>',result);
+                  //console.log('response of expense.js 119==>',result);
                   axios.post(`http://localhost:4000/update_transaction`, {
                       order_id: options.order_id,
                       payment_id: result.razorpay_payment_id      
@@ -148,12 +171,19 @@ function toRazorPay(e) {
                       headers: {
                           Authorization: token
                       }
-                  }).then(() => {
+                  }).then((res) => {
                       alert("you are a premium user now")
-                      document.getElementById("Premium").removeAttribute("hidden");
-                      buyPremium.setAttribute("hidden", "");
-                      document.getElementById("openleaderboard").removeAttribute("hidden");
-                      document.getElementById("gotoIncomeNExpense").removeAttribute("hidden");
+                      const new_token = res.data.token;
+                      localStorage.setItem("token",new_token);
+                      console.log('token after premium',res.data);
+                      console.log("expense.js line 178",res.token);
+                      const buttonToRemove = document.getElementById("rzp-button1");
+                      if (buttonToRemove) {
+                      buttonToRemove.parentNode.removeChild(buttonToRemove);
+                      }
+                      document.getElementById('message').innerHTML="You are a premium user";
+
+                      
                   }).catch(err => {
                       console.log(err);
                       alert(err.response.data.message);
@@ -169,7 +199,7 @@ function toRazorPay(e) {
           //if payment 
           payrazor.on('payment.failed', (response) => {
               // console.log(response);
-              console.log('response of expense.js,line 148',response);
+              //console.log('response of expense.js,line 148',response);
               axios.post(`http://localhost:4000/failed_transaction`, {
                   order_id: response.error.metadata.order_id,
                   payment_id: response.error.metadata.payment_id

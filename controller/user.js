@@ -40,15 +40,17 @@ const generateAccessToken = (id,prem) => {
 
 async function login(req, res) {
   try {
-    console.log('output of login function line 43===>', req.body);
+    //console.log('output of login function line 43===>', req.body);
+    //console.log("login +++++ ",req);
     const { email, password } = req.body;
 
+    //console.log('login +++++++',email);
     if (!email || !password) {
       return res.status(400).json({ err: 'Bad parameters - Something is missing' });
     }
 
     const user = await User.findOne({ where: { email: email } });
-    console.log(user.body);
+    console.log(user);
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
@@ -61,7 +63,7 @@ async function login(req, res) {
       }
       const userId = user.dataValues.id;
       const prem = user.dataValues.isPremium;
-      console.log("contents of userId==========>>>>",user.dataValues.isPremium);
+      //console.log("contents of userId==========>>>>",user.dataValues.isPremium);
       if (result) {
         res.status(200).json({ message: 'Successfully logged in' ,token: generateAccessToken(userId,prem)});
       } else {
@@ -76,4 +78,4 @@ async function login(req, res) {
 
 
 
-module.exports = {signup,login};
+module.exports = {signup,login,generateAccessToken};
