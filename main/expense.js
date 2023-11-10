@@ -156,7 +156,7 @@ function toRazorPay(e) {
   }).then(res => {
       //console.log('response of expense.js 111===>',res);
       if (res.status === 201) {
-        console.log("response of buypremium , expense.js line 159",res.data);  
+        //console.log("response of buypremium , expense.js line 159",res.data);  
         let options = {
               //order detail we get from backend so noone manuplate them directly
               "key": res.data.data.key_id,
@@ -175,8 +175,8 @@ function toRazorPay(e) {
                       alert("you are a premium user now")
                       const new_token = res.data.token;
                       localStorage.setItem("token",new_token);
-                      console.log('token after premium',res.data);
-                      console.log("expense.js line 178",res.token);
+                      //console.log('token after premium',res.data);
+                      //console.log("expense.js line 178",res.token);
                       const buttonToRemove = document.getElementById("rzp-button1");
                       if (buttonToRemove) {
                       buttonToRemove.parentNode.removeChild(buttonToRemove);

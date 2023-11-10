@@ -18,7 +18,7 @@ const getAllExpenses = (req, res) => {
     //console.log(res.body);
     Expense.findAll({where : {userId: req.user.id}})
         .then(expenses => {
-            console.log("result of controller expense line 21>>>>>>>",expenses);
+            //console.log("result of controller expense line 21>>>>>>>",expenses);
             return res.status(200).json({ expenses, success: true });
             //console.log(expenses);
         })
