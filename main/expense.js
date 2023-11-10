@@ -93,7 +93,7 @@ function showLeaderBoard(){
     var leaderboardElem = document.getElementById('leaderboard');
     leaderboardElem.innerHTML += '<h1> Leader Board </<h1>';
     userLeaderBoardArray.data.forEach((userDeatails)=>{
-      leaderboardElem.innerHTML += `<li>Name - ${userDeatails.name} Total Expensw -${userDeatails.expense}`
+      leaderboardElem.innerHTML += `<li>Name - ${userDeatails.name} Total Expense -${userDeatails.total_cost}`
     })
 
   }

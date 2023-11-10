@@ -6,7 +6,7 @@ const userauthentication = require('../middleware/auth');
 
 
 //router.post('/expense',userauthentication.auth, premiumController.);
-router.get('/showLeaderBoard',premiumController.getUserLeaderboard);        // update these routes with backend of premium feature
+router.get('/showLeaderBoard',userauthentication.auth,premiumController.getUserLeaderboard);        // update these routes with backend of premium feature
 //router.delete('/expense/:id', userauthentication.auth,expenseController.deleteExpense);
 
 
