@@ -2,6 +2,7 @@ const express = require('express');
 const userController = require('../controller/user');
 const router = express.Router();
 const path = require('path');
+//const userAuthentication = require('../middleware/auth');
 
 // Define routes for signup and login
 router.post('/user', userController.signup);

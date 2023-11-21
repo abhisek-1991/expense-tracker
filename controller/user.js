@@ -44,13 +44,13 @@ async function login(req, res) {
     //console.log("login +++++ ",req);
     const { email, password } = req.body;
 
-    //console.log('login +++++++',email);
+    console.log('login +++++++',email);
     if (!email || !password) {
       return res.status(400).json({ err: 'Bad parameters - Something is missing' });
     }
 
     const user = await User.findOne({ where: { email: email } });
-    //console.log(user);
+    console.log(user);
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });

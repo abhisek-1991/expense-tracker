@@ -1,41 +1,24 @@
-function login(e) {
-    e.preventDefault();
-    //console.log(e.target.name);
+document.getElementById("login_btn").addEventListener("click", function() {
+    const email = document.querySelector('input[name="email"]').value;
+    const password = document.querySelector('input[name="password"]').value;
 
     const loginDetails = {
-        email: e.target.email.value,
-        password: e.target.password.value
+        email: email,
+        password: password
+    };
 
-    }
-    //console.log(loginDetails)
-    axios.post('http://localhost:4000/login',loginDetails).then(response => {
-            //console.log(response.data.message)
-            //console.log("login_response========",response.data)
-            window.location.href = "./expense.html"
-            localStorage.setItem('token', response.data.token)
-            //console.log(response);
-            //window.location.href = "../ExpenseTracker/index.html"
-    }).catch(err => {
-        console.log(JSON.stringify(err))
-        document.body.innerHTML += `<div style="color:red;">${err.message} <div>`;
-    })
-}
+    axios.post('http://localhost:4000/login', loginDetails)
+        .then(response => {
+            localStorage.setItem('token', response.data.token);
+            window.location.href = "./expense.html";
+        })
+        .catch(err => {
+            console.log(JSON.stringify(err));
+            document.body.innerHTML += `<div style="color:red;">${err.message} <div>`;
+        });
+});
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+document.getElementById("forgetPasswordBtn").addEventListener("click", function() {
+    // Redirect to forget_pass.html
+    window.location.href = "./forget_pass.html";
+});

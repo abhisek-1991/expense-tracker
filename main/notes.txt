@@ -1,0 +1,10 @@
+Issues-
+1-when i am clicking forget password in the login 
+page then it is asking me to fill the empty boxes
+
+make rotes 
+add routes in app.js
+make back end api for forget password
+little bit of check required in the forget_pass.html
+also 
+------------------------------------------------------
